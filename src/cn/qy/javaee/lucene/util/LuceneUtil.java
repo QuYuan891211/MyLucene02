@@ -35,6 +35,7 @@ public class LuceneUtil {
     private static Version version;
     private static IndexWriter.MaxFieldLength maxFieldLength;
 
+
     static {
         try{
             directory = FSDirectory.open(new File("D:\\WebProjects\\qy\\IdeaProjects\\MyLuence02\\LuceneDBDB"));

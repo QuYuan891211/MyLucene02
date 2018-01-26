@@ -10,6 +10,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,24 +23,37 @@ public class CRUD {
     @Test
     public void add() throws Exception{
         Article article = new Article(1,"腾讯","腾讯是一家上市公司",9);
-        IndexWriter indexWriter = new IndexWriter(LuceneUtil.getDirectory(),LuceneUtil.getAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
+        Directory RAMdirectory = new RAMDirectory(LuceneUtil.getDirectory());
+
+        IndexWriter indexWriter = new IndexWriter(LuceneUtil.getDirectory(),LuceneUtil.getAnalyzer(), LuceneUtil.getMaxFieldLength());
+        IndexWriter RAMIndexWriter = new IndexWriter(RAMdirectory,LuceneUtil.getAnalyzer(),LuceneUtil.getMaxFieldLength());
+
         Document document = LuceneUtil.javaBean2Document(article);
-        indexWriter.addDocument(document);
+        RAMIndexWriter.addDocument(document);
+        RAMIndexWriter.close();
+        indexWriter.addIndexesNoOptimize(RAMdirectory);
         indexWriter.close();
     }
     @Test
     public void addAll() throws Exception{
+        //进行索引库优化
+        Directory RAMdirectory = new RAMDirectory(LuceneUtil.getDirectory());
+        IndexWriter RAMindexWriter = new IndexWriter(RAMdirectory,LuceneUtil.getAnalyzer(),LuceneUtil.getMaxFieldLength());
         IndexWriter indexWriter = new IndexWriter(LuceneUtil.getDirectory(),LuceneUtil.getAnalyzer(),LuceneUtil.getMaxFieldLength());
         Article article1 = new Article(1,"腾讯","腾讯是一家上市公司",10);
-        indexWriter.addDocument(LuceneUtil.javaBean2Document(article1));
+        RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article1));
         Article article2 = new Article(2,"腾讯","腾讯的董事会主席是马化腾",20);
-        indexWriter.addDocument(LuceneUtil.javaBean2Document(article2));
+        RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article2));
         Article article3 = new Article(3,"腾讯","腾讯的总市值超过3000亿美元",20);
-        indexWriter.addDocument(LuceneUtil.javaBean2Document(article3));
+        RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article3));
         Article article4 = new Article(4,"腾讯","腾讯的游戏很赚钱",30);
-        indexWriter.addDocument(LuceneUtil.javaBean2Document(article4));
+        RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article4));
         Article article5 = new Article(5,"腾讯","腾讯在港股的股价为800港币",5);
-        indexWriter.addDocument(LuceneUtil.javaBean2Document(article5));
+        RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article5));
+
+        RAMindexWriter.close();
+        indexWriter.addIndexesNoOptimize(RAMdirectory);
+        indexWriter.setMergeFactor(3);
         indexWriter.close();
     }
     @Test
