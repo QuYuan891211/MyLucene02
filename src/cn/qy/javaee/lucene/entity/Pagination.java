@@ -10,6 +10,18 @@ public class Pagination<T> {
     private List<T> list;
 
 
+    public Pagination(Integer currPageNum, Integer totalPageNum, Integer pageSize, Integer totalNum, List<T> list) {
+        this.currPageNum = currPageNum;
+        this.totalPageNum = totalPageNum;
+        this.pageSize = pageSize;
+        this.totalNum = totalNum;
+        this.list = list;
+    }
+
+    public Pagination(){
+
+    }
+
     public Integer getCurrPageNum() {
         return currPageNum;
     }
@@ -22,8 +34,13 @@ public class Pagination<T> {
         return totalPageNum;
     }
 
-    public void setTotalPageNum(Integer totalPageNum) {
-        this.totalPageNum = totalPageNum;
+    public void setTotalPageNum(Integer allObjNum) {
+        this.totalNum = allObjNum;
+        if(this.totalNum % this.pageSize == 0){
+            this.totalPageNum = this.totalNum / this.pageSize;
+        }else{
+            this.totalPageNum = this.totalNum / this.pageSize + 1;
+        }
     }
 
     public Integer getPageSize() {
