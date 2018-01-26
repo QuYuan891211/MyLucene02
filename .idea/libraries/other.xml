@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="other">
+    <CLASSES>
+      <root url="file://D:/CS/JavaWeb/WebLibs/other" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://D:/CS/JavaWeb/WebLibs/other" recursive="false" />
+  </library>
+</component>
