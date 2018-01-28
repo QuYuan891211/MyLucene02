@@ -5,11 +5,9 @@ import cn.qy.javaee.lucene.util.LuceneUtil;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.junit.Test;
@@ -48,7 +46,7 @@ public class CRUD {
         RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article3));
         Article article4 = new Article(4,"腾讯","腾讯的游戏很赚钱",30);
         RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article4));
-        Article article5 = new Article(5,"腾讯","腾讯在港股的股价为800港币",5);
+        Article article5 = new Article(5,"腾讯上","腾讯在港股的股价为800港币",5);
         RAMindexWriter.addDocument(LuceneUtil.javaBean2Document(article5));
 
         RAMindexWriter.close();
@@ -85,10 +83,13 @@ public class CRUD {
     public void findAll() throws Exception{
         List<Article> list = new ArrayList<Article>();
         IndexSearcher indexSearcher = new IndexSearcher(LuceneUtil.getDirectory());
-        QueryParser queryParser = new QueryParser(LuceneUtil.getVersion(),"content",LuceneUtil.getAnalyzer());
+        /*多条件搜索
+        与结果排序*/
+        QueryParser queryParser = new MultiFieldQueryParser(LuceneUtil.getVersion(),new String[]{"content","title"},LuceneUtil.getAnalyzer());
         String keywords = "腾";
+        Sort sort = new Sort(new SortField("count",SortField.INT,true),new SortField("id",SortField.INT,true));
         Query query = queryParser.parse(keywords);
-        TopDocs topDocs = indexSearcher.search(query,1000000);
+        TopDocs topDocs = indexSearcher.search(query,null,1000000,sort);
         for(ScoreDoc scoreDoc:topDocs.scoreDocs){
             Integer doc = scoreDoc.doc;
             Document document = indexSearcher.doc(doc);

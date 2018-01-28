@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="themes/default/easyui.css" type="text/css"></link>
+    <link rel="stylesheet" href="themes/icon.css" type="text/css"></link>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+    <table id="dg"></table>
+<script type="text/javascript">
+    $("#dg").datagrid({
+        url:'${pageContext.request.contextPath}/ArticleServlet?id=' + new Date().getTime(),
+        fitColumns: true,
+        singleSelect:true,
+        columns:[[
+            {field:"id",title:"编号"}
+        ]],
+    });
+</script>
+
+</body>
+</html>

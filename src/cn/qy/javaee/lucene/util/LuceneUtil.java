@@ -9,6 +9,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -40,6 +41,8 @@ public class LuceneUtil {
         try{
             directory = FSDirectory.open(new File("D:\\WebProjects\\qy\\IdeaProjects\\MyLuence02\\LuceneDBDB"));
             version = Version.LUCENE_30;
+            //参数1 ：boolean isMaxWordLength ， 当为true 时，分词器进行最大词长切
+            //分；当为false 时，分词器进行最细粒度切分。
             analyzer = new StandardAnalyzer(version);
             maxFieldLength = IndexWriter.MaxFieldLength.LIMITED;
         }catch (Exception e){

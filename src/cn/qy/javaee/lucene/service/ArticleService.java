@@ -9,7 +9,6 @@ public class ArticleService {
     public Pagination<Article> fy(String words, int currentNo) throws Exception{
         Pagination<Article> pagination = new Pagination<>();
         pagination.setCurrPageNum(currentNo);
-        pagination.setPageSize(2);
         Integer start = (pagination.getCurrPageNum()-1)*pagination.getPageSize();
         pagination.setTotalNum(articleDao.getIndexNum(words));
         pagination.setTotalPageNum(pagination.getTotalNum());
